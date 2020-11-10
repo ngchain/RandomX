@@ -25,6 +25,7 @@ jobs:
           target: aarch64-unknown-linux-gnu
           gcc_package: gcc-aarch64-linux-gnu
           gcc: aarch64-linux-gnu-gcc
+          g++: aarch64-linux-gnu-g++
           qemu: qemu-aarch64 -L /usr/aarch64-linux-gnu
           qemu_target: aarch64-linux-user
     steps:
@@ -44,12 +45,15 @@ jobs:
         ./configure --target-list=${{ matrix.qemu_target }} --prefix=$HOME/qemu --disable-tools --disable-slirp --disable-fdt --disable-capstone --disable-docs
         make -j$(nproc) install
 
-        upcase=$(echo ${{ matrix.target }} | awk '{ print toupper($0) }' | sed 's/-/_/g')
-      if: matrix.target != '' && matrix.os == 'ubuntu-latest'
+        # Configure Cargo for cross compilation and tell it how it can run
+        # cross executables
+        echo CC=${{ matrix.gcc }} >> $GITHUB_ENV
+        echo CXX=${{ matrix.g++ }} >> $GITHUB_ENV
+
+      if: matrix.build == 'aarch64-linux'
 
     # Build `librandomx.a`
     - run: cmake -G "Unix Makefiles" . && make -j$(nproc) randomx
-
 
     # ... and now perform some goop to move all the relevant artifacts into
     # something that we'll upload from this action.
