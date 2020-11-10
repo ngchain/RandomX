@@ -25,7 +25,7 @@ jobs:
           target: aarch64-unknown-linux-gnu
           gcc_package: gcc-aarch64-linux-gnu
           gcc: aarch64-linux-gnu-gcc
-          g++: aarch64-linux-gnu-g++
+          gxx: aarch64-linux-gnu-g++
           qemu: qemu-aarch64 -L /usr/aarch64-linux-gnu
           qemu_target: aarch64-linux-user
     steps:
@@ -48,7 +48,7 @@ jobs:
         # Configure Cargo for cross compilation and tell it how it can run
         # cross executables
         echo CC=${{ matrix.gcc }} >> $GITHUB_ENV
-        echo CXX=${{ matrix.g++ }} >> $GITHUB_ENV
+        echo CXX=${{ matrix.gxx }} >> $GITHUB_ENV
 
       if: matrix.build == 'aarch64-linux'
 
