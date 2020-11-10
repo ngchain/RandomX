@@ -25,6 +25,7 @@ jobs:
           target: aarch64-unknown-linux-gnu
           gcc_package: gcc-aarch64-linux-gnu
           gcc: aarch64-linux-gnu-gcc
+          gxx_package: g++-aarch64-linux-gnu
           gxx: aarch64-linux-gnu-g++
           qemu: qemu-aarch64 -L /usr/aarch64-linux-gnu
           qemu_target: aarch64-linux-user
@@ -35,7 +36,7 @@ jobs:
       run: |
         set -ex
         sudo apt-get update
-        sudo apt-get install -y ${{ matrix.gcc_package }}
+        sudo apt-get install -y ${{ matrix.gcc_package }} ${{ matrix.gxx_package }}
         # Download and build qemu from source since the most recent release is
         # way faster at arm emulation than the current version github actions'
         # ubuntu image uses. Disable as much as we can to get it to build
