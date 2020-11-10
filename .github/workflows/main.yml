@@ -55,7 +55,11 @@ jobs:
 
     # Build `librandomx.a`
     - run: cmake -G "Unix Makefiles" . && make -j$(nproc) randomx
+      if: matrix.build != 'aarch64-linux'
 
+    - run: cmake -G "Unix Makefiles" -DARCH_ID=aarch64 . && make -j$(nproc) randomx
+      if: matrix.build == 'aarch64-linux'
+      
     # ... and now perform some goop to move all the relevant artifacts into
     # something that we'll upload from this action.
     - run: mkdir dist
